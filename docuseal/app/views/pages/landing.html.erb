@@ -1,95 +1,79 @@
-<div class="flex flex-wrap space-y-4 md:flex-nowrap md:space-y-0">
-  <%= render 'shared/settings_nav' %>
-  <div class="flex-grow max-w-xl mx-auto">
-    <h1 class="text-4xl font-bold mb-4">
-      <%= t('profile') %>
-    </h1>
-    <%= form_for current_user, url: update_contact_settings_profile_index_path, method: :patch, html: { autocomplete: 'off', class: 'space-y-4' } do |f| %>
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="form-control">
-          <%= f.label :first_name, t('first_name'), class: 'label' %>
-          <%= f.text_field :first_name, required: true, class: 'base-input', dir: 'auto' %>
+<section class="flex items-center justify-center">
+  <div class="py-10 mx-auto max-w-7xl">
+    <div class="max-w-xl mx-auto">
+      <div class="text-center">
+        <div class="relative flex flex-col items-center">
+          <%= render 'shared/logo', width: '100', height: '100' %>
+          <h1 class="text-6xl font-bold mt-4 mb-4">
+            DocuSeal
+          </h1>
+          <% if Docuseal.version.present? %>
+            <a href="https://github.com/docusealco/docuseal/releases" target="_blank" class="badge badge-outline badge-lg block mx-auto">
+              v<%= Docuseal.version %>
+            </a>
+          <% end %>
         </div>
-        <div class="form-control">
-          <%= f.label :last_name, t('last_name'), class: 'label' %>
-          <%= f.text_field :last_name, required: true, class: 'base-input', dir: 'auto' %>
+        <h2 class="mt-4 mb-16 text-lg text-center text-gray-600">
+          A self-hosted and open-source web platform that provides secure and efficient digital document signing and processing.
+        </h2>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 gap-12 md:gap-10 md:grid-cols-2">
+      <div class="card bg-base-200">
+        <div class="card-body">
+          <div class="text-center transition-all">
+            <div class="inline-block p-4 mb-4 -mt-16 bg-base-content rounded-full">
+              <%= svg_icon('brand_docker', class: 'w-10 h-10 text-base-100 stroke-1') %>
+            </div>
+            <h3 class="mb-4 text-2xl font-semibold">Easy to Start</h3>
+            <p class="text-base text-gray-500">
+              Run on your own host using Docker container, or deploy on  your favorite managed PaaS with a single <a href="https://www.docuseal.com/install" class="link link-neutral font-bold">click</a>.
+            </p>
+          </div>
         </div>
       </div>
-      <div class="form-control">
-        <%= f.label :email, t('email'), class: 'label' %>
-        <%= f.email_field :email, autocomplete: 'off', class: 'base-input' %>
-      </div>
-      <div class="form-control pt-2">
-        <%= f.button button_title(title: t('update'), disabled_with: t('updating')), class: 'base-button' %>
-      </div>
-    <% end %>
-    <%= render 'email_configs' %>
-    <p class="text-2xl font-bold mt-8 mb-4">
-      <%= t('signature') %>
-    </p>
-    <% signature = UserConfigs.load_signature(current_user) %>
-    <% if signature %>
-      <div class="flex justify-center mb-4 relative">
-        <%= button_to button_title(title: t('remove'), disabled_with: t('removing')), user_signature_path, method: :delete, class: 'right-0 top-0 absolute link' %>
-        <img src="<%= signature.url %>" style="max-height: 200px; width: auto" width="<%= signature.metadata['width'] %>" height="<%= signature.metadata['height'] %>">
-      </div>
-    <% end %>
-    <a href="<%= edit_user_signature_path %>" data-turbo-frame="modal" class="base-button w-full">
-      <%= t('update_signature') %>
-    </a>
-    <p class="text-2xl font-bold mt-8 mb-4">
-      <%= t('initials') %>
-    </p>
-    <% initials = UserConfigs.load_initials(current_user) %>
-    <% if initials %>
-      <div class="flex justify-center mb-4 relative">
-        <%= button_to button_title(title: t('remove'), disabled_with: t('removing')), user_initials_path, method: :delete, class: 'right-0 top-0 absolute link' %>
-        <img src="<%= initials.url %>" style="max-height: 200px; width: auto" width="<%= initials.metadata['width'] %>" height="<%= initials.metadata['height'] %>">
-      </div>
-    <% end %>
-    <a href="<%= edit_user_initials_path %>" data-turbo-frame="modal" class="base-button w-full">
-      <%= t('update_initials') %>
-    </a>
-    <% if true_user == current_user && !current_account.testing? %>
-      <p class="text-2xl font-bold mt-8 mb-4">
-        <%= t('change_password') %>
-      </p>
-      <%= form_for current_user, url: update_password_settings_profile_index_path, method: :patch, html: { autocomplete: 'off', class: 'space-y-4' } do |f| %>
-        <div class="form-control">
-          <%= f.label :password, t('new_password'), class: 'label' %>
-          <%= f.password_field :password, autocomplete: 'off', class: 'base-input' %>
+      <div class="card bg-base-200">
+        <div class="card-body">
+          <div class="text-center transition-all">
+            <div class="inline-block p-4 mb-4 -mt-16 bg-base-content rounded-full">
+              <%= svg_icon('devices', class: 'w-10 h-10 text-base-100') %>
+            </div>
+            <h3 class="mb-4 text-2xl font-semibold">Mobile Optimized</h3>
+            <p class="text-base text-gray-500">
+              Review and sign digital documents online from any device.
+              Docuseal document forms are optimized for screens of all sizes.
+            </p>
+          </div>
         </div>
-        <div class="form-control">
-          <%= f.label :password_confirmation, t('confirm_password'), class: 'label' %>
-          <%= f.password_field :password_confirmation, autocomplete: 'off', class: 'base-input' %>
-        </div>
-        <div class="form-control pt-2">
-          <%= f.button button_title(title: t('update'), disabled_with: t('updating')), class: 'base-button' %>
-        </div>
-      <% end %>
-      <p class="text-2xl font-bold mt-8 mb-4">
-        <%= t('two_factor_authentication') %>
-      </p>
-      <div class="space-y-4">
-        <% if current_user.otp_required_for_login %>
-          <p class="flex items-center space-x-1">
-            <%= svg_icon('circle_check', class: 'stroke-success inline flex-none w-5 h-5') %>
-            <span>
-              <%= t('2fa_has_been_configured') %>
-            </span>
-          </p>
-          <a href="<%= edit_mfa_setup_path %>" data-turbo-frame="modal" class="white-button w-full !px-8">🔓 <%= t('remove_2fa') %></a>
-        <% else %>
-          <p class="flex items-center space-x-1">
-            <%= svg_icon('info_circle', class: 'stroke-warning inline flex-none w-5 h-5') %>
-            <span>
-              <%= t('2fa_is_not_configured') %>
-            </span>
-          </p>
-          <a href="<%= new_mfa_setup_path %>" data-turbo-frame="modal" class="base-button w-full !px-8">🔒 <%= t('set_up_2fa') %></a>
-        <% end %>
       </div>
-    <% end %>
+      <div class="card bg-base-200">
+        <div class="card-body">
+          <div class="text-center transition-all">
+            <div class="inline-block p-4 mb-4 -mt-16 bg-base-content rounded-full">
+              <%= svg_icon('shield_check', class: 'w-10 h-10 text-base-100') %>
+            </div>
+            <h3 class="mb-4 text-2xl font-semibold">Secure</h3>
+            <p class="text-base text-gray-500">
+              Host it on your hardware under a VPN to ensure that important documents can be accesses only within your organization.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card bg-base-200">
+        <div class="card-body">
+          <div class="text-center transition-all">
+            <div class="inline-block p-4 mb-4 -mt-16 bg-base-content rounded-full">
+              <%= svg_icon('brand_github', class: 'w-10 h-10 text-base-100') %>
+            </div>
+            <h3 class="mb-4 text-2xl font-semibold">Open Source</h3>
+            <p class="text-base text-gray-500">
+              Source code is available under <a href="<%= Docuseal::GITHUB_URL %>" class="link link-neutral font-bold" target="_blank">github.com/docusealco</a>.<br>
+              Open-source contributors are always ready to help!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="w-0 md:w-52"></div>
-</div>
+</section>
+<%= render 'shared/attribution', with_counter: true %>
